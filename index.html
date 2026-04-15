@@ -1,0 +1,993 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Maiylsamy Durai — Automation Engineer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Syne:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a0a;
+    --bg2: #111111;
+    --bg3: #1a1a1a;
+    --border: #2a2a2a;
+    --border2: #3a3a3a;
+    --text: #e8e4dc;
+    --muted: #6b6760;
+    --accent: #c8f060;
+    --accent2: #60c8f0;
+    --accent3: #f060a8;
+    --mono: 'Space Mono', monospace;
+    --sans: 'Syne', sans-serif;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 16px;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  /* noise texture overlay */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.4;
+  }
+
+  /* nav */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.2rem 2.5rem;
+    border-bottom: 1px solid var(--border);
+    background: rgba(10,10,10,0.85);
+    backdrop-filter: blur(12px);
+  }
+
+  .nav-logo {
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--accent);
+    letter-spacing: 0.05em;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 2rem;
+    list-style: none;
+  }
+
+  .nav-links a {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--muted);
+    text-decoration: none;
+    letter-spacing: 0.08em;
+    transition: color 0.2s;
+  }
+
+  .nav-links a:hover { color: var(--text); }
+
+  /* sections */
+  section {
+    position: relative;
+    z-index: 1;
+  }
+
+  /* hero */
+  .hero {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    padding: 8rem 2.5rem 4rem;
+    gap: 4rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .hero-left {}
+
+  .hero-tag {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--accent);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .hero-tag::before {
+    content: '';
+    display: inline-block;
+    width: 20px;
+    height: 1px;
+    background: var(--accent);
+  }
+
+  h1 {
+    font-size: clamp(3rem, 6vw, 5.5rem);
+    font-weight: 800;
+    line-height: 1.0;
+    margin-bottom: 1.5rem;
+    letter-spacing: -0.03em;
+  }
+
+  .h1-accent { color: var(--accent); }
+
+  .hero-sub {
+    font-size: 16px;
+    color: var(--muted);
+    line-height: 1.7;
+    max-width: 420px;
+    margin-bottom: 2.5rem;
+  }
+
+  .hero-btns {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .btn {
+    font-family: var(--mono);
+    font-size: 12px;
+    padding: 12px 24px;
+    border-radius: 2px;
+    text-decoration: none;
+    letter-spacing: 0.08em;
+    transition: all 0.2s;
+    cursor: pointer;
+    display: inline-block;
+  }
+
+  .btn-primary {
+    background: var(--accent);
+    color: #0a0a0a;
+    border: 1px solid var(--accent);
+    font-weight: 700;
+  }
+
+  .btn-primary:hover { background: transparent; color: var(--accent); }
+
+  .btn-ghost {
+    background: transparent;
+    color: var(--text);
+    border: 1px solid var(--border2);
+  }
+
+  .btn-ghost:hover { border-color: var(--text); }
+
+  /* hero right — terminal card */
+  .terminal {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+    font-family: var(--mono);
+    font-size: 13px;
+  }
+
+  .terminal-bar {
+    background: var(--bg3);
+    padding: 10px 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .dot { width: 10px; height: 10px; border-radius: 50%; }
+  .dot-r { background: #ff5f56; }
+  .dot-y { background: #ffbd2e; }
+  .dot-g { background: #27c93f; }
+
+  .terminal-title {
+    font-size: 11px;
+    color: var(--muted);
+    margin-left: 8px;
+  }
+
+  .terminal-body {
+    padding: 1.5rem;
+    line-height: 2;
+  }
+
+  .t-muted { color: var(--muted); }
+  .t-accent { color: var(--accent); }
+  .t-blue { color: var(--accent2); }
+  .t-pink { color: var(--accent3); }
+  .t-white { color: var(--text); }
+
+  .cursor {
+    display: inline-block;
+    width: 8px;
+    height: 15px;
+    background: var(--accent);
+    vertical-align: middle;
+    animation: blink 1s step-end infinite;
+  }
+
+  @keyframes blink { 50% { opacity: 0; } }
+
+  /* stack pills */
+  .stack-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 1.5rem;
+  }
+
+  .pill {
+    font-family: var(--mono);
+    font-size: 11px;
+    padding: 4px 10px;
+    border: 1px solid var(--border2);
+    border-radius: 2px;
+    color: var(--muted);
+    letter-spacing: 0.05em;
+  }
+
+  .pill-accent { border-color: var(--accent); color: var(--accent); }
+  .pill-blue { border-color: var(--accent2); color: var(--accent2); }
+
+  /* stats bar */
+  .stats-bar {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .stat {
+    padding: 2rem 2.5rem;
+    border-right: 1px solid var(--border);
+  }
+
+  .stat:last-child { border-right: none; }
+
+  .stat-num {
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: var(--accent);
+    letter-spacing: -0.03em;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+
+  .stat-label {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  /* projects */
+  .projects-section {
+    padding: 6rem 2.5rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 3rem;
+  }
+
+  .section-eyebrow {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--accent);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  .section-title {
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    line-height: 1.1;
+  }
+
+  .projects-grid {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+  }
+
+  .project-card {
+    background: var(--bg);
+    padding: 2rem;
+    transition: background 0.2s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .project-card:hover { background: var(--bg2); }
+
+  .project-card::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0;
+    height: 2px;
+    width: 0;
+    background: var(--accent);
+    transition: width 0.3s ease;
+  }
+
+  .project-card:hover::after { width: 100%; }
+
+  .col-8 { grid-column: span 8; }
+  .col-4 { grid-column: span 4; }
+  .col-6 { grid-column: span 6; }
+  .col-12 { grid-column: span 12; }
+
+  .project-num {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--muted);
+    margin-bottom: 1.5rem;
+  }
+
+  .project-tag {
+    font-family: var(--mono);
+    font-size: 10px;
+    padding: 3px 8px;
+    border-radius: 2px;
+    margin-bottom: 1rem;
+    display: inline-block;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .tag-green { background: rgba(200,240,96,0.1); color: var(--accent); border: 1px solid rgba(200,240,96,0.3); }
+  .tag-blue { background: rgba(96,200,240,0.1); color: var(--accent2); border: 1px solid rgba(96,200,240,0.3); }
+  .tag-pink { background: rgba(240,96,168,0.1); color: var(--accent3); border: 1px solid rgba(240,96,168,0.3); }
+  .tag-amber { background: rgba(240,180,60,0.1); color: #f0b43c; border: 1px solid rgba(240,180,60,0.3); }
+
+  .project-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin-bottom: 0.75rem;
+    line-height: 1.2;
+  }
+
+  .project-desc {
+    font-size: 14px;
+    color: var(--muted);
+    line-height: 1.7;
+    margin-bottom: 1.5rem;
+  }
+
+  .project-stack {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+  }
+
+  .project-stack span {
+    font-family: var(--mono);
+    font-size: 10px;
+    padding: 2px 7px;
+    border: 1px solid var(--border2);
+    color: var(--muted);
+    border-radius: 2px;
+    letter-spacing: 0.05em;
+  }
+
+  /* experience */
+  .exp-section {
+    padding: 6rem 2.5rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .exp-grid {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 4rem;
+    margin-top: 3rem;
+  }
+
+  .exp-sidebar {
+    padding-top: 4px;
+  }
+
+  .exp-nav {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .exp-nav li {
+    font-family: var(--mono);
+    font-size: 12px;
+    padding: 10px 16px;
+    border-left: 2px solid var(--border);
+    color: var(--muted);
+    cursor: pointer;
+    transition: all 0.2s;
+    letter-spacing: 0.05em;
+  }
+
+  .exp-nav li.active {
+    border-left-color: var(--accent);
+    color: var(--accent);
+    background: rgba(200,240,96,0.05);
+  }
+
+  .exp-nav li:hover:not(.active) {
+    border-left-color: var(--border2);
+    color: var(--text);
+  }
+
+  .exp-content {}
+
+  .exp-panel { display: none; }
+  .exp-panel.active { display: block; }
+
+  .exp-role {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+
+  .exp-company {
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--accent);
+    margin-bottom: 4px;
+  }
+
+  .exp-period {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--muted);
+    margin-bottom: 1.5rem;
+    letter-spacing: 0.05em;
+  }
+
+  .exp-points {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .exp-points li {
+    font-size: 14px;
+    color: var(--muted);
+    line-height: 1.7;
+    padding-left: 20px;
+    position: relative;
+  }
+
+  .exp-points li::before {
+    content: '→';
+    position: absolute;
+    left: 0;
+    color: var(--accent);
+    font-family: var(--mono);
+  }
+
+  /* skills */
+  .skills-section {
+    padding: 6rem 2.5rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .skills-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    margin-top: 3rem;
+  }
+
+  .skill-group {
+    background: var(--bg);
+    padding: 1.5rem;
+  }
+
+  .skill-group-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--accent);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+  }
+
+  .skill-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .skill-list li {
+    font-size: 14px;
+    color: var(--muted);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .skill-list li::before {
+    content: '';
+    display: inline-block;
+    width: 4px;
+    height: 4px;
+    background: var(--border2);
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  /* contact / footer */
+  .contact-section {
+    padding: 6rem 2.5rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: center;
+  }
+
+  .contact-big {
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    line-height: 1.1;
+  }
+
+  .contact-big span { color: var(--accent); }
+
+  .contact-links {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .contact-link {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 1.25rem;
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    text-decoration: none;
+    color: var(--text);
+    font-size: 14px;
+    transition: all 0.2s;
+  }
+
+  .contact-link:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: rgba(200,240,96,0.03);
+  }
+
+  .contact-link-label { font-family: var(--mono); font-size: 11px; color: var(--muted); }
+  .contact-link-val { font-weight: 500; }
+  .contact-link-arrow { font-family: var(--mono); color: var(--muted); font-size: 13px; }
+
+  footer {
+    padding: 1.5rem 2.5rem;
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .footer-copy {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--muted);
+  }
+
+  .footer-made {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--muted);
+  }
+
+  /* animations */
+  .fade-up {
+    opacity: 0;
+    transform: translateY(24px);
+    animation: fadeUp 0.6s ease forwards;
+  }
+
+  @keyframes fadeUp {
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .delay-1 { animation-delay: 0.1s; }
+  .delay-2 { animation-delay: 0.2s; }
+  .delay-3 { animation-delay: 0.3s; }
+  .delay-4 { animation-delay: 0.4s; }
+  .delay-5 { animation-delay: 0.5s; }
+
+  /* responsive */
+  @media (max-width: 900px) {
+    .hero { grid-template-columns: 1fr; padding-top: 7rem; }
+    .terminal { display: none; }
+    .stats-bar { grid-template-columns: repeat(2, 1fr); }
+    .stat { border-right: none; border-bottom: 1px solid var(--border); }
+    .col-8, .col-4, .col-6 { grid-column: span 12; }
+    .exp-grid { grid-template-columns: 1fr; gap: 2rem; }
+    .exp-nav { flex-direction: row; overflow-x: auto; }
+    .exp-nav li { white-space: nowrap; border-left: none; border-bottom: 2px solid var(--border); padding: 8px 12px; }
+    .exp-nav li.active { border-bottom-color: var(--accent); border-left: none; }
+    .contact-section { grid-template-columns: 1fr; }
+    nav { padding: 1rem 1.25rem; }
+    .nav-links { gap: 1rem; }
+    .hero { padding: 7rem 1.25rem 3rem; }
+    .projects-section, .exp-section, .skills-section, .contact-section { padding: 4rem 1.25rem; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">MD.portfolio</div>
+  <ul class="nav-links">
+    <li><a href="#projects">projects</a></li>
+    <li><a href="#experience">experience</a></li>
+    <li><a href="#skills">skills</a></li>
+    <li><a href="#contact">contact</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-left">
+    <div class="hero-tag fade-up">Available for opportunities</div>
+    <h1 class="fade-up delay-1">
+      Maiylsamy<br>
+      <span class="h1-accent">Durai.</span>
+    </h1>
+    <p class="hero-sub fade-up delay-2">
+      Associate Software Engineer building intelligent automation systems —
+      combining Python, Selenium, Appium, and LLM integration to eliminate
+      manual QA effort across web and mobile platforms.
+    </p>
+    <div class="hero-btns fade-up delay-3">
+      <a href="#projects" class="btn btn-primary">View projects</a>
+      <a href="https://github.com/Maiylsamy" target="_blank" class="btn btn-ghost">GitHub ↗</a>
+      <a href="https://linkedin.com/in/maiylsamy" target="_blank" class="btn btn-ghost">LinkedIn ↗</a>
+    </div>
+    <div class="stack-row fade-up delay-4">
+      <span class="pill pill-accent">Python</span>
+      <span class="pill pill-accent">Selenium</span>
+      <span class="pill pill-accent">Appium</span>
+      <span class="pill pill-blue">LLM Integration</span>
+      <span class="pill pill-blue">Django</span>
+      <span class="pill">MySQL</span>
+      <span class="pill">GitHub</span>
+    </div>
+  </div>
+
+  <div class="terminal fade-up delay-3">
+    <div class="terminal-bar">
+      <div class="dot dot-r"></div>
+      <div class="dot dot-y"></div>
+      <div class="dot dot-g"></div>
+      <span class="terminal-title">maiylsamy@tesquirel ~ automation</span>
+    </div>
+    <div class="terminal-body">
+      <div><span class="t-muted">$ </span><span class="t-accent">whoami</span></div>
+      <div><span class="t-white">Maiylsamy Durai</span> <span class="t-muted">// Assoc. SWE</span></div>
+      <br>
+      <div><span class="t-muted">$ </span><span class="t-accent">cat</span> <span class="t-blue">current_role.txt</span></div>
+      <div><span class="t-white">TesQuirel Solutions</span> <span class="t-muted">· Nov 2024 →</span></div>
+      <div><span class="t-muted">Bengaluru, Karnataka · On-site</span></div>
+      <br>
+      <div><span class="t-muted">$ </span><span class="t-accent">ls</span> <span class="t-blue">./projects</span></div>
+      <div><span class="t-pink">dom_automation/</span></div>
+      <div><span class="t-pink">mobile_xpath_extractor/</span></div>
+      <div><span class="t-pink">llm_element_engine/</span></div>
+      <div><span class="t-pink">pdf_excel_comparator/</span></div>
+      <div><span class="t-pink">institute_management/</span></div>
+      <br>
+      <div><span class="t-muted">$ </span><span class="t-accent">echo</span> <span class="t-blue">$STATUS</span></div>
+      <div><span class="t-white">open to new opportunities</span> <span class="cursor"></span></div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<div class="stats-bar">
+  <div class="stat">
+    <div class="stat-num">5+</div>
+    <div class="stat-label">Projects built</div>
+  </div>
+  <div class="stat">
+    <div class="stat-num">2</div>
+    <div class="stat-label">Automation stacks</div>
+  </div>
+  <div class="stat">
+    <div class="stat-num">1.5</div>
+    <div class="stat-label">Years experience</div>
+  </div>
+  <div class="stat">
+    <div class="stat-num">AI+</div>
+    <div class="stat-label">LLM integrated</div>
+  </div>
+</div>
+
+<!-- PROJECTS -->
+<section class="projects-section" id="projects">
+  <div class="section-header">
+    <div>
+      <div class="section-eyebrow">// 01 — work</div>
+      <div class="section-title">Projects</div>
+    </div>
+  </div>
+
+  <div class="projects-grid">
+
+    <div class="project-card col-8">
+      <div class="project-num">01</div>
+      <span class="project-tag tag-green">Test Automation</span>
+      <div class="project-title">Scriptless DOM Automation Framework</div>
+      <p class="project-desc">
+        Handles complex iframe nesting in DOM parsing for web automation. Features a
+        single-pass datepicker XPath collector that captures all date field XPaths at once,
+        joins them using the & delimiter, and splits them at runtime during automation
+        execution — eliminating repeated element lookups.
+      </p>
+      <div class="project-stack">
+        <span>Python</span><span>Selenium</span><span>XPath</span><span>DOM</span><span>iframe handling</span>
+      </div>
+    </div>
+
+    <div class="project-card col-4">
+      <div class="project-num">02</div>
+      <span class="project-tag tag-amber">Mobile</span>
+      <div class="project-title">Mobile XPath Extraction (Android)</div>
+      <p class="project-desc">
+        Appium-based XPath extractor for Native Android apps and Hybrid apps with WebView.
+        Handles automatic context switching between native and web layers.
+      </p>
+      <div class="project-stack">
+        <span>Appium</span><span>Android</span><span>WebView</span><span>Python</span>
+      </div>
+    </div>
+
+    <div class="project-card col-4">
+      <div class="project-num">03</div>
+      <span class="project-tag tag-pink">AI-Powered</span>
+      <div class="project-title">LLM Element Extraction Engine</div>
+      <p class="project-desc">
+        Uses an LLM to intelligently identify and extract UI elements from application
+        screens — reducing manual XPath authoring significantly in automation workflows.
+      </p>
+      <div class="project-stack">
+        <span>LLM</span><span>Python</span><span>Appium</span><span>Selenium</span>
+      </div>
+    </div>
+
+    <div class="project-card col-8">
+      <div class="project-num">04</div>
+      <span class="project-tag tag-blue">Data Validation</span>
+      <div class="project-title">PDF vs Excel Comparison System</div>
+      <p class="project-desc">
+        LLM-assisted data validation engine that compares PDF reports against Excel exports
+        and automatically flags mismatches between the two formats. Built to handle
+        real-world document inconsistencies and formatting differences that traditional
+        string comparison fails to catch.
+      </p>
+      <div class="project-stack">
+        <span>Python</span><span>LLM</span><span>PDF parsing</span><span>Excel</span><span>Data validation</span>
+      </div>
+    </div>
+
+    <div class="project-card col-12">
+      <div class="project-num">05</div>
+      <span class="project-tag tag-green">Full Stack</span>
+      <div class="project-title">Institute Management System</div>
+      <p class="project-desc">
+        Full-stack web application for managing educational institutes. Includes secure
+        authentication with role-based access control (admin, teacher, student), student
+        enrollment and profile management, attendance tracking, and communication tools
+        to promote collaboration. Built during internship at Palle Technologies.
+      </p>
+      <div class="project-stack">
+        <span>Python</span><span>Django</span><span>MySQL</span><span>RBAC</span><span>Authentication</span>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- EXPERIENCE -->
+<section class="exp-section" id="experience">
+  <div class="section-eyebrow">// 02 — career</div>
+  <div class="section-title">Experience</div>
+
+  <div class="exp-grid">
+    <div class="exp-sidebar">
+      <ul class="exp-nav" id="exp-nav">
+        <li class="active" data-panel="tq">TesQuirel Solutions</li>
+        <li data-panel="pt">Palle Technologies</li>
+      </ul>
+    </div>
+
+    <div class="exp-content">
+      <div class="exp-panel active" id="panel-tq">
+        <div class="exp-role">Associate Software Engineer</div>
+        <div class="exp-company">TesQuirel Solutions</div>
+        <div class="exp-period">NOV 2024 – PRESENT · BENGALURU · ON-SITE</div>
+        <ul class="exp-points">
+          <li>Built scriptless DOM automation framework handling complex iframe nesting and multi-context element resolution using Selenium and Python</li>
+          <li>Developed single-pass datepicker XPath collection system — captures all date field XPaths at once, joins via & delimiter, splits at runtime</li>
+          <li>Developed Appium-based XPath extraction system for Native Android apps and Hybrid WebView apps with automatic context switching</li>
+          <li>Integrated LLM to intelligently extract UI elements from app screens, significantly reducing manual XPath authoring effort</li>
+          <li>Built PDF vs Excel data comparison engine using LLM-assisted validation — auto-detects mismatches between document formats</li>
+          <li>Works across both Selenium (web) and Appium (mobile) automation stacks within the same framework</li>
+        </ul>
+      </div>
+
+      <div class="exp-panel" id="panel-pt">
+        <div class="exp-role">Python Full Stack Developer Intern</div>
+        <div class="exp-company">Palle Technologies</div>
+        <div class="exp-period">JAN 2024 – JUN 2024 · BENGALURU · ON-SITE</div>
+        <ul class="exp-points">
+          <li>Built a full-stack Institute Management System using Python and Django for Palle Technology Institute</li>
+          <li>Implemented secure authentication with role-based access control for admins, teachers, and students</li>
+          <li>Created modules for student enrollment, profile management, and attendance tracking</li>
+          <li>Integrated communication tools to promote collaboration across user roles</li>
+          <li>Optimized database queries with MySQL and contributed to full project lifecycle</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section class="skills-section" id="skills">
+  <div class="section-eyebrow">// 03 — stack</div>
+  <div class="section-title">Skills</div>
+
+  <div class="skills-grid">
+    <div class="skill-group">
+      <div class="skill-group-label">Automation</div>
+      <ul class="skill-list">
+        <li>Selenium</li>
+        <li>Appium</li>
+        <li>XPath / DOM</li>
+        <li>iframe handling</li>
+        <li>Scriptless frameworks</li>
+      </ul>
+    </div>
+    <div class="skill-group">
+      <div class="skill-group-label">Languages</div>
+      <ul class="skill-list">
+        <li>Python</li>
+        <li>SQL</li>
+        <li>JavaScript</li>
+        <li>HTML / CSS</li>
+      </ul>
+    </div>
+    <div class="skill-group">
+      <div class="skill-group-label">AI / LLM</div>
+      <ul class="skill-list">
+        <li>LLM integration</li>
+        <li>Element extraction</li>
+        <li>Document comparison</li>
+        <li>AI-assisted QA</li>
+      </ul>
+    </div>
+    <div class="skill-group">
+      <div class="skill-group-label">Web / Backend</div>
+      <ul class="skill-list">
+        <li>Django</li>
+        <li>Flask</li>
+        <li>MySQL</li>
+        <li>REST APIs</li>
+      </ul>
+    </div>
+    <div class="skill-group">
+      <div class="skill-group-label">Mobile</div>
+      <ul class="skill-list">
+        <li>Android Native</li>
+        <li>Hybrid / WebView</li>
+        <li>Appium</li>
+        <li>Context switching</li>
+      </ul>
+    </div>
+    <div class="skill-group">
+      <div class="skill-group-label">Tools</div>
+      <ul class="skill-list">
+        <li>GitHub</li>
+        <li>VS Code</li>
+        <li>Postman</li>
+        <li>Excel / PDF tooling</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="contact-section" id="contact">
+  <div>
+    <div class="section-eyebrow">// 04 — reach out</div>
+    <div class="contact-big">
+      Let's build<br>something<br><span>smart.</span>
+    </div>
+  </div>
+
+  <div class="contact-links">
+    <a href="https://linkedin.com/in/maiylsamy" target="_blank" class="contact-link">
+      <div>
+        <div class="contact-link-label">LinkedIn</div>
+        <div class="contact-link-val">linkedin.com/in/maiylsamy</div>
+      </div>
+      <div class="contact-link-arrow">↗</div>
+    </a>
+    <a href="https://github.com/Maiylsamy" target="_blank" class="contact-link">
+      <div>
+        <div class="contact-link-label">GitHub</div>
+        <div class="contact-link-val">github.com/Maiylsamy</div>
+      </div>
+      <div class="contact-link-arrow">↗</div>
+    </a>
+    <a href="mailto:your.email@gmail.com" class="contact-link">
+      <div>
+        <div class="contact-link-label">Email</div>
+        <div class="contact-link-val">maiylsamy310@gmail.com</div>
+      </div>
+      <div class="contact-link-arrow">↗</div>
+    </a>
+    <a href="https://www.google.com/maps/place/Bengaluru" target="_blank" class="contact-link">
+      <div>
+        <div class="contact-link-label">Location</div>
+        <div class="contact-link-val">Bengaluru, Karnataka, India</div>
+      </div>
+      <div class="contact-link-arrow">↗</div>
+    </a>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-copy">© 2026 Maiylsamy Durai</div>
+  <div class="footer-made">Built with HTML · Hosted on GitHub Pages</div>
+</footer>
+
+<script>
+  const navItems = document.querySelectorAll('#exp-nav li');
+  navItems.forEach(item => {
+    item.addEventListener('click', () => {
+      navItems.forEach(n => n.classList.remove('active'));
+      item.classList.add('active');
+      document.querySelectorAll('.exp-panel').forEach(p => p.classList.remove('active'));
+      document.getElementById('panel-' + item.dataset.panel).classList.add('active');
+    });
+  });
+</script>
+
+</body>
+</html>
